@@ -23,6 +23,24 @@ public class EventoControlador {
         return "eventos";
     }
 
+    @GetMapping({"/eventos/{id}"})
+    public String listarEventosId(@PathVariable Long id, Model modelo) {
+        modelo.addAttribute("eventos", servicio.obtenerEventoPorId(id));
+        return "eventos";
+    }
+
+    @GetMapping({"/admin/eventos"})
+    public String listarEventosAdmin(Model modelo) {
+        modelo.addAttribute("eventos", servicio.listarEventos());
+        return "eventos-admin";
+    }
+
+    @GetMapping({"/admin/eventos/{id}"})
+    public String listarEventosAdminId(@PathVariable Long id, Model modelo) {
+        modelo.addAttribute("eventos", servicio.obtenerEventoPorId(id));
+        return "eventos-admin";
+    }
+
     @GetMapping("/eventos/nuevo")
     public String mostrarFormularioDeRegistrtarEventos(Model modelo) {
         Evento evento = new Evento();
@@ -33,7 +51,7 @@ public class EventoControlador {
     @PostMapping("/eventos")
     public String guardarEvento(@ModelAttribute("evento") Evento evento) {
         servicio.guardarEvento(evento);
-        return "redirect:/eventos";
+        return "redirect:/admin/eventos";
     }
 
     @GetMapping("/eventos/editar/{id}")
@@ -50,13 +68,13 @@ public class EventoControlador {
         eventoExistente.setDescripcion(evento.getDescripcion());
 
         servicio.actualizarEvento(eventoExistente);
-        return "redirect:/eventos";
+        return "redirect:/admin/eventos";
 
     }
 
-    @GetMapping("/eventos/{id}")
+    @GetMapping("/eventos/borrar/{id}")
     public String eliminarEvento(@PathVariable Long id) {
         servicio.eliminarEvento(id);
-        return "redirect:/eventos";
+        return "redirect:/admin/eventos";
     }
 }
